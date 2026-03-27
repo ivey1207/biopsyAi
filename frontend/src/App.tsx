@@ -11,15 +11,19 @@ type SegmentationPayload = {
     mask: SegImage;
     overlay: SegImage;
     prob: SegImage;
+    distance: SegImage;
+    contour: SegImage;
   };
   coverage: number;
   thr_used: number;
+  num_components: number;
 };
 
 type PredictResponse = {
   non_biopsy: boolean;
   reason: string;
   pred_class?: number;
+  pred_class_name_ru?: string;
   confidence?: number;
   segmentation?: SegmentationPayload | null;
 };
@@ -216,40 +220,87 @@ export default function App() {
             </div>
 
             <div className="artifact-body">
-               <div className="result-hero">
-                  <div className="result-badge">Class {selectedArtifact.pred_class}</div>
-                  <div className="result-confidence">Confidence: {(selectedArtifact.confidence || 0) * 100}%</div>
+               <div className="result-hero" style={{ background: "var(--claude-bg-dark)", border: "1px solid var(--claude-border)" }}>
+                  <div className="result-info">
+                     <div className="info-label" style={{ color: "var(--claude-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Classification Diagnosis</div>
+                     <div className="result-badge" style={{ fontSize: "1.2rem", fontWeight: "600", color: "var(--claude-accent)" }}>
+                        {selectedArtifact.pred_class_name_ru || `Class ${selectedArtifact.pred_class}`}
+                     </div>
+                  </div>
+                  <div className="result-metrics" style={{ textAlign: "right" }}>
+                     <div className="info-label" style={{ color: "var(--claude-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Model Confidence</div>
+                     <div className="result-confidence" style={{ fontWeight: "600" }}>
+                        {(selectedArtifact.confidence || 0) * 100}%
+                     </div>
+                  </div>
                </div>
 
-               <div className="preview-grid">
+               <div className="preview-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginTop: "20px" }}>
                   {selectedArtifact.segmentation?.maps.overlay && (
                     <div className="preview-card">
-                       <label>Binary Mask Overlay</label>
+                       <label>Binary Overlay</label>
                        <div className="img-container">
                           <img src={`data:image/png;base64,${selectedArtifact.segmentation.maps.overlay.png_b64}`} alt="Overlay" />
                        </div>
                     </div>
                   )}
-                  {selectedArtifact.segmentation && (
+                  {selectedArtifact.segmentation?.maps.mask && (
                     <div className="preview-card">
-                       <label>Lesion Metrics</label>
-                       <div className="metrics-list">
-                          <div className="metric-item">
-                             <span>Coverage</span>
-                             <strong>{(selectedArtifact.segmentation.coverage * 100).toFixed(2)}%</strong>
-                          </div>
-                          <div className="metric-item">
-                             <span>Threshold</span>
-                             <strong>{selectedArtifact.segmentation.thr_used.toFixed(3)}</strong>
-                          </div>
-                          <div className="metric-item">
-                             <span>Class Description</span>
-                             <strong style={{ fontSize: "0.8rem" }}>{selectedArtifact.reason}</strong>
-                          </div>
+                       <label>Binary Mask (Raw)</label>
+                       <div className="img-container">
+                          <img src={`data:image/png;base64,${selectedArtifact.segmentation.maps.mask.png_b64}`} alt="Mask" />
+                       </div>
+                    </div>
+                  )}
+                  {selectedArtifact.segmentation?.maps.contour && (
+                    <div className="preview-card">
+                       <label>Contour Extraction</label>
+                       <div className="img-container">
+                          <img src={`data:image/png;base64,${selectedArtifact.segmentation.maps.contour.png_b64}`} alt="Contour" />
+                       </div>
+                    </div>
+                  )}
+                  {selectedArtifact.segmentation?.maps.prob && (
+                    <div className="preview-card">
+                       <label>Probability Map (Heat)</label>
+                       <div className="img-container">
+                          <img src={`data:image/png;base64,${selectedArtifact.segmentation.maps.prob.png_b64}`} alt="Prob" />
+                       </div>
+                    </div>
+                  )}
+                  {selectedArtifact.segmentation?.maps.distance && (
+                    <div className="preview-card">
+                       <label>Distance Transform</label>
+                       <div className="img-container">
+                          <img src={`data:image/png;base64,${selectedArtifact.segmentation.maps.distance.png_b64}`} alt="Distance" />
                        </div>
                     </div>
                   )}
                </div>
+
+               {selectedArtifact.segmentation && (
+                 <div className="metrics-card" style={{ marginTop: "20px", padding: "15px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--claude-border)" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--claude-text-muted)", display: "block", marginBottom: "10px" }}>Segmentation Statistics</label>
+                    <div className="metrics-list" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
+                       <div className="metric-item">
+                          <span>Lesion Coverage:</span>
+                          <strong>{(selectedArtifact.segmentation.coverage * 100).toFixed(2)}%</strong>
+                       </div>
+                       <div className="metric-item">
+                          <span>Active Components:</span>
+                          <strong>{selectedArtifact.segmentation.num_components}</strong>
+                       </div>
+                       <div className="metric-item">
+                          <span>Used Threshold:</span>
+                          <strong>{selectedArtifact.segmentation.thr_used.toFixed(4)}</strong>
+                       </div>
+                       <div className="metric-item">
+                          <span>Domain Reason:</span>
+                          <strong style={{ fontSize: "0.75rem" }}>{selectedArtifact.reason}</strong>
+                       </div>
+                    </div>
+                 </div>
+               )}
             </div>
           </aside>
         )}
