@@ -1,0 +1,10 @@
+# ⚙️ Render Blueprint (Automatic Deployment)
+services:
+  - type: web
+    name: biopsy-ai-service
+    runtime: docker # Use the Dockerfile
+    plan: free # Use the Free tier
+    region: ohio
+    envVars:
+      - key: PORT
+        value: 10000 # Standard Render Free Port
