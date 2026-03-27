@@ -39,7 +39,7 @@ def load_model(ckpt_path: Path, device: torch.device):
     model.load_state_dict(ckpt["state_dict"])
     model.to(device)
     model.eval()
-    return model, ckpt.get("img_size", 256)
+    return model, ckpt.get("img_size", 256), ckpt.get("best_threshold", 0.5)
 
 
 def main():
@@ -47,7 +47,7 @@ def main():
     parser.add_argument("--images-dir", required=True, type=str)
     parser.add_argument("--model-path", required=True, type=str)
     parser.add_argument("--output-dir", required=True, type=str)
-    parser.add_argument("--threshold", default=0.5, type=float)
+    parser.add_argument("--threshold", default=-1.0, type=float)
     parser.add_argument("--threshold-mode", default="fixed", choices=["fixed", "otsu", "percentile"], type=str)
     parser.add_argument("--percentile", default=85.0, type=float)
     parser.add_argument("--min-area", default=80, type=int)
@@ -57,7 +57,7 @@ def main():
     device = torch.device(
         "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
     )
-    model, img_size = load_model(Path(args.model_path), device)
+    model, img_size, ckpt_thr = load_model(Path(args.model_path), device)
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -85,7 +85,7 @@ def main():
             elif args.threshold_mode == "percentile":
                 thr = float(np.percentile(prob_resized, np.clip(args.percentile, 1.0, 99.0)))
             else:
-                thr = float(args.threshold)
+                thr = float(args.threshold if args.threshold >= 0 else ckpt_thr)
 
             mask = (prob_resized > thr).astype(np.uint8) * 255
             mask = postprocess_mask(mask, min_area=args.min_area, max_components=args.max_components)
