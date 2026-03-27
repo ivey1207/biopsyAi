@@ -6,6 +6,12 @@ type SegImage = {
   png_b64: string;
 };
 
+type SegVariant = {
+  name: string;
+  png_b64: string;
+  type: string;
+};
+
 type SegmentationPayload = {
   maps: {
     mask: SegImage;
@@ -14,6 +20,7 @@ type SegmentationPayload = {
     distance: SegImage;
     contour: SegImage;
   };
+  variants?: SegVariant[];
   coverage: number;
   thr_used: number;
   num_components: number;
@@ -333,6 +340,25 @@ export default function App() {
                           <strong style={{ fontSize: "0.75rem" }}>{selectedArtifact.reason}</strong>
                        </div>
                     </div>
+                 </div>
+               )}
+
+               {selectedArtifact.segmentation?.variants && (
+                 <div className="method-comparison" style={{ marginTop: "40px", borderTop: "1px solid var(--biopsy-border)", paddingTop: "20px" }}>
+                    <h3 style={{ fontSize: "1rem", marginBottom: "20px", color: "var(--biopsy-accent)" }}>Algorithm Comparison (Benchmarking)</h3>
+                    <div className="variants-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "10px" }}>
+                       {selectedArtifact.segmentation.variants.map((v, i) => (
+                         <div key={i} className="variant-card" style={{ background: "#1a1a1a", border: "1px solid #333", borderRadius: "8px", overflow: "hidden" }}>
+                            <div style={{ height: "130px", overflow: "hidden" }}>
+                               <img src={`data:image/png;base64,${v.png_b64}`} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                            </div>
+                            <div style={{ padding: "6px", fontSize: "0.65rem", textAlign: "center", background: "#111" }}>{v.name}</div>
+                         </div>
+                       ))}
+                    </div>
+                    <p style={{ marginTop: "15px", fontSize: "0.7rem", color: "var(--biopsy-text-muted)", fontStyle: "italic" }}>
+                       *Benchmarking helps validate Neural Network precision against legacy algorithms and edge-case variants.
+                    </p>
                  </div>
                )}
             </div>

@@ -382,14 +382,42 @@ def _run_inference(
     blend = (rgb.astype(np.float32) * 0.65 + overlay.astype(np.float32) * 0.35).clip(0, 255).astype(np.uint8)
 
     components = _components_from_mask(mask=mask.astype(np.uint8), image_rgb=rgb.astype(np.uint8), top_k=max_components)
+    # Generate VARIANTS for comparison view
+    used_thr = float(used_thr)
+    
+    def get_mask_b64(m):
+        return _b64_png_from_numpy(m.astype(np.uint8))
+
+    # Variant 1: Classical Otsu (Traditional ML)
+    gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+    _, otsu_mask_raw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    otsu_mask = 255 - otsu_mask_raw # Invert usually needed for medical light background
+
+    # Variant 2: High Sensitivity (Low Threshold)
+    high_sens_mask = (prob_map > 0.3).astype(np.uint8) * 255
+    
+    # Variant 3: Selective (High Threshold)
+    selective_mask = (prob_map > 0.7).astype(np.uint8) * 255
+    
+    # Variant 4: Morphologically Cleaned
+    kernel = np.ones((5,5), np.uint8)
+    curated_mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+
     seg_obj = {
         "maps": {
-            "mask": {"png_b64": _b64_png_from_numpy(mask.astype(np.uint8))},
-            "overlay": {"png_b64": _b64_png_from_numpy(blend.astype(np.uint8))},
+            "mask": {"png_b64": get_mask_b64(mask)},
+            "overlay": {"png_b64": get_mask_b64(blend)},
             "prob": {"png_b64": _b64_png_from_numpy((np.clip(prob_map, 0, 1) * 255.0).astype(np.uint8))},
             "distance": {"png_b64": _distance_map_png(mask.astype(np.uint8))},
             "contour": {"png_b64": _contour_overlay_png(rgb.astype(np.uint8), mask.astype(np.uint8))},
         },
+        "variants": [
+            {"name": "Neural Network (Your Model)", "png_b64": get_mask_b64(mask), "type": "ai"},
+            {"name": "Classical Otsu", "png_b64": get_mask_b64(otsu_mask), "type": "legacy"},
+            {"name": "High Sensitivity (0.3)", "png_b64": get_mask_b64(high_sens_mask), "type": "variant"},
+            {"name": "Selective Model (0.7)", "png_b64": get_mask_b64(selective_mask), "type": "variant"},
+            {"name": "Curated Polish", "png_b64": get_mask_b64(curated_mask), "type": "ai"},
+        ],
         "components": components,
         "coverage": coverage,
         "thr_used": used_thr,
