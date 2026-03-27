@@ -1,5 +1,5 @@
 # --- Build Stage (Frontend) ---
-FROM node:18-alpine AS frontend-builder
+FROM node:20-alpine AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install
@@ -13,7 +13,7 @@ WORKDIR /app
 
 # Install system dependencies for OpenCV and other libs
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
