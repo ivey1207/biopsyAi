@@ -1,13 +1,13 @@
 :root {
-  --claude-bg: #0b0b0b;
-  --claude-sidebar: #111111;
-  --claude-accent: #d97757;
-  --claude-text: #e0e0e0;
-  --claude-text-muted: #8d8d8d;
-  --claude-card: #1a1a1a;
-  --claude-border: #2a2a2a;
-  --claude-hover: #222222;
-  --claude-user-msg: #313131;
+  --biopsy-bg: #0b0b0b;
+  --biopsy-sidebar: #111111;
+  --biopsy-accent: #d97757;
+  --biopsy-text: #e0e0e0;
+  --biopsy-text-muted: #8d8d8d;
+  --biopsy-card: #1a1a1a;
+  --biopsy-border: #2a2a2a;
+  --biopsy-hover: #222222;
+  --biopsy-user-msg: #313131;
 }
 
 * {
@@ -18,21 +18,21 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--claude-bg);
-  color: var(--claude-text);
+  background-color: var(--biopsy-bg);
+  color: var(--biopsy-text);
   overflow: hidden;
 }
 
-.claude-container {
+.biopsy-container {
   display: flex;
   height: 100vh;
   width: 100vw;
 }
 
 /* Sidebar */
-.claude-sidebar {
-  background-color: var(--claude-sidebar);
-  border-right: 1px solid var(--claude-border);
+.biopsy-sidebar {
+  background-color: var(--biopsy-sidebar);
+  border-right: 1px solid var(--biopsy-border);
   width: 260px;
   display: flex;
   flex-direction: column;
@@ -40,20 +40,20 @@ body {
   z-index: 100;
 }
 
-.claude-sidebar.closed {
+.biopsy-sidebar.closed {
   width: 0;
   opacity: 0;
   pointer-events: none;
 }
 
 .sidebar-header { padding: 20px; }
-.claude-logo-text { font-size: 1.4rem; font-weight: 700; color: var(--claude-accent); margin-bottom: 20px; }
+.biopsy-logo-text { font-size: 1.4rem; font-weight: 700; color: var(--biopsy-accent); margin-bottom: 20px; }
 
 .new-chat-btn {
   width: 100%;
   padding: 12px;
   background: transparent;
-  border: 1px solid var(--claude-border);
+  border: 1px solid var(--biopsy-border);
   border-radius: 8px;
   color: #fff;
   text-align: left;
@@ -63,22 +63,22 @@ body {
   gap: 10px;
 }
 
-.new-chat-btn:hover { background-color: var(--claude-hover); }
+.new-chat-btn:hover { background-color: var(--biopsy-hover); }
 
 .sidebar-content { flex: 1; padding: 20px 10px; overflow-y: auto; }
-.history-label { font-size: 0.7rem; color: var(--claude-text-muted); text-transform: uppercase; margin-bottom: 15px; padding-left: 10px; }
+.history-label { font-size: 0.7rem; color: var(--biopsy-text-muted); text-transform: uppercase; margin-bottom: 15px; padding-left: 10px; }
 .history-item { padding: 10px; border-radius: 6px; font-size: 0.9rem; color: #bbb; cursor: pointer; margin-bottom: 4px; }
 .history-item.active { background-color: #252525; color: #fff; }
 
-.sidebar-footer { padding: 20px; border-top: 1px solid var(--claude-border); }
+.sidebar-footer { padding: 20px; border-top: 1px solid var(--biopsy-border); }
 .user-profile { display: flex; align-items: center; gap: 12px; }
 .user-avatar { width: 32px; height: 32px; background: #313131; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 .user-info { display: flex; flex-direction: column; }
 .user-name { font-size: 0.85rem; font-weight: 600; }
-.user-plan { font-size: 0.75rem; color: var(--claude-text-muted); }
+.user-plan { font-size: 0.75rem; color: var(--biopsy-text-muted); }
 
 /* Main Area Split View */
-.claude-main {
+.biopsy-main {
   flex: 1;
   display: flex;
   flex-direction: row; /* Horizontal split */
@@ -90,7 +90,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--claude-bg);
+  background-color: var(--biopsy-bg);
   min-width: 400px;
   max-width: 1000px;
   margin: 0 auto;
@@ -98,7 +98,7 @@ body {
 
 .artifact-active .chat-section {
   margin: 0; /* Align left when artifact is active */
-  border-right: 1px solid var(--claude-border);
+  border-right: 1px solid var(--biopsy-border);
 }
 
 .main-header {
@@ -109,8 +109,8 @@ body {
   justify-content: space-between;
 }
 
-.sidebar-toggle { background: transparent; border: none; color: var(--claude-text-muted); cursor: pointer; font-size: 1.2rem; }
-.model-selector { font-size: 0.9rem; font-weight: 600; color: var(--claude-text-muted); }
+.sidebar-toggle { background: transparent; border: none; color: var(--biopsy-text-muted); cursor: pointer; font-size: 1.2rem; }
+.model-selector { font-size: 0.9rem; font-weight: 600; color: var(--biopsy-text-muted); }
 
 /* Chat Area */
 .chat-scroll-area {
@@ -125,23 +125,23 @@ body {
   text-align: center;
 }
 
-.hero-star { font-size: 3rem; color: var(--claude-accent); margin-bottom: 20px; }
+.hero-star { font-size: 3rem; color: var(--biopsy-accent); margin-bottom: 20px; }
 .hero-greeting h1 { font-size: 2rem; margin-bottom: 10px; }
 .hero-suggestions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
 .hero-suggestions button {
   padding: 10px 20px;
-  background: var(--claude-card);
-  border: 1px solid var(--claude-border);
+  background: var(--biopsy-card);
+  border: 1px solid var(--biopsy-border);
   border-radius: 20px;
-  color: var(--claude-text);
+  color: var(--biopsy-text);
   cursor: pointer;
 }
 
 .message-list { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 40px; }
 .message-row { margin-bottom: 40px; display: flex; gap: 20px; }
 .message-avatar { width: 30px; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-.user .message-avatar { background: var(--claude-user-msg); font-size: 0.7rem; font-weight: 700; }
-.assistant .message-avatar { color: var(--claude-accent); }
+.user .message-avatar { background: var(--biopsy-user-msg); font-size: 0.7rem; font-weight: 700; }
+.assistant .message-avatar { color: var(--biopsy-accent); }
 
 .message-content { flex: 1; min-width: 0; }
 .message-text { line-height: 1.6; font-size: 1rem; }
@@ -149,20 +149,20 @@ body {
 .message-image-card {
   margin-top: 15px;
   border-radius: 12px;
-  border: 1px solid var(--claude-border);
+  border: 1px solid var(--biopsy-border);
   overflow: hidden;
   max-width: 300px;
 }
 .message-image-card img { width: 100%; }
-.image-label { padding: 8px; background: #111; font-size: 0.7rem; color: var(--claude-text-muted); }
+.image-label { padding: 8px; background: #111; font-size: 0.7rem; color: var(--biopsy-text-muted); }
 
 .artifact-pill {
   margin-top: 15px;
   padding: 8px 16px;
   background: #222;
-  border: 1px solid var(--claude-accent);
+  border: 1px solid var(--biopsy-accent);
   border-radius: 20px;
-  color: var(--claude-accent);
+  color: var(--biopsy-accent);
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
@@ -171,7 +171,7 @@ body {
 /* Artifact Panel */
 .artifact-panel {
   width: 50%;
-  border-left: 1px solid var(--claude-border);
+  border-left: 1px solid var(--biopsy-border);
   background-color: #121212;
   display: flex;
   flex-direction: column;
@@ -189,30 +189,30 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid var(--claude-border);
+  border-bottom: 1px solid var(--biopsy-border);
 }
 
 .header-left { display: flex; align-items: center; gap: 15px; }
-.close-btn { cursor: pointer; color: var(--claude-text-muted); font-size: 1.2rem; }
+.close-btn { cursor: pointer; color: var(--biopsy-text-muted); font-size: 1.2rem; }
 .artifact-title { font-weight: 600; font-size: 0.9rem; }
-.artifact-subtitle { font-size: 0.75rem; color: var(--claude-text-muted); }
+.artifact-subtitle { font-size: 0.75rem; color: var(--biopsy-text-muted); }
 
 .header-right { display: flex; gap: 10px; }
 .badge-pill { padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; background: #222; color: #888; border: 1px solid #333; }
-.badge-pill.active { background: #d9775722; color: var(--claude-accent); border-color: var(--claude-accent); }
+.badge-pill.active { background: #d9775722; color: var(--biopsy-accent); border-color: var(--biopsy-accent); }
 
 .artifact-body { flex: 1; overflow-y: auto; padding: 30px; background: #0e0e0e; }
 
 .result-hero {
   margin-bottom: 30px;
   padding: 20px;
-  background: var(--claude-card);
+  background: var(--biopsy-card);
   border-radius: 12px;
-  border: 1px solid var(--claude-border);
+  border: 1px solid var(--biopsy-border);
   text-align: center;
 }
-.result-badge { font-size: 2rem; font-weight: 900; color: var(--claude-accent); }
-.result-confidence { font-size: 0.9rem; color: var(--claude-text-muted); }
+.result-badge { font-size: 2rem; font-weight: 900; color: var(--biopsy-accent); }
+.result-confidence { font-size: 0.9rem; color: var(--biopsy-text-muted); }
 
 .preview-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
 .preview-card label { display: block; margin-bottom: 15px; font-size: 0.8rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; }
@@ -233,12 +233,12 @@ body {
 .metric-item strong { color: #fff; }
 
 /* Chat Footer */
-.chat-footer { padding: 20px 40px; background-color: var(--claude-bg); }
+.chat-footer { padding: 20px 40px; background-color: var(--biopsy-bg); }
 .input-container {
   max-width: 800px;
   margin: 0 auto;
-  background: var(--claude-card);
-  border: 1px solid var(--claude-border);
+  background: var(--biopsy-card);
+  border: 1px solid var(--biopsy-border);
   border-radius: 20px;
   padding: 12px 20px;
   display: flex;
@@ -248,10 +248,10 @@ body {
 .input-container input { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; outline: none; }
 .attach-btn, .send-btn { width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .attach-btn { background: #333; color: #fff; font-size: 1.5rem; line-height: 0; }
-.send-btn { background: var(--claude-accent); color: #fff; }
+.send-btn { background: var(--biopsy-accent); color: #fff; }
 .send-btn:disabled { opacity: 0.3; }
 
-.footer-disclaimer { text-align: center; font-size: 0.7rem; color: var(--claude-text-muted); margin-top: 15px; }
+.footer-disclaimer { text-align: center; font-size: 0.7rem; color: var(--biopsy-text-muted); margin-top: 15px; }
 
 .typing-indicator span { animation: blink 1.4s infinite both; font-size: 2rem; line-height: 0; }
 .typing-indicator span:nth-child(2) { animation-delay: .2s; }

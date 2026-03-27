@@ -72,7 +72,7 @@ export default function App() {
     setMessages(prev => [...prev, {
       id: assistantMsgId,
       role: "assistant",
-      content: "Analyzing sample... (AI Sonnet 4.6)",
+      content: "Analyzing sample... (Biopsy AI Core)",
       status: "loading"
     }]);
 
@@ -104,11 +104,11 @@ export default function App() {
   };
 
   return (
-    <div className="claude-container">
+    <div className="biopsy-container">
       {/* Sidebar */}
-      <aside className={`claude-sidebar ${sidebarOpen ? "open" : "closed"}`}>
+      <aside className={`biopsy-sidebar ${sidebarOpen ? "open" : "closed"}`}>
         <div className="sidebar-header">
-          <div className="claude-logo-text">Biopsy AI</div>
+          <div className="biopsy-logo-text">Biopsy AI</div>
           <button className="new-chat-btn" onClick={() => { setMessages([]); setSelectedArtifact(null); }}>
              <span>+</span> New Analysis
           </button>
@@ -116,28 +116,28 @@ export default function App() {
         <div className="sidebar-content">
           <div className="history-label">Recents</div>
           <div className="history-item active">Current Biopsy</div>
-          <div className="history-item">Gastric #01</div>
-          <div className="history-item">Intestinal #04</div>
+          <div className="history-item">Recent Analysis #01</div>
+          <div className="history-item">Recent Analysis #02</div>
         </div>
         <div className="sidebar-footer">
            <div className="user-profile">
               <div className="user-avatar">IA</div>
               <div className="user-info">
                  <span className="user-name">Ibrohim Avazov</span>
-                 <span className="user-plan">Claude Code Base</span>
+                 <span className="user-plan">Biopsy AI Core</span>
               </div>
            </div>
         </div>
       </aside>
 
       {/* Main View Area */}
-      <main className={`claude-main ${selectedArtifact ? "artifact-active" : ""}`}>
+      <main className={`biopsy-main ${selectedArtifact ? "artifact-active" : ""}`}>
         
         {/* Chat Section */}
         <section className="chat-section">
            <header className="main-header">
               <button onClick={() => setSidebarOpen(!sidebarOpen)} className="sidebar-toggle">☰</button>
-              <div className="model-selector">Biopsy AI <span style={{ color: "var(--claude-accent)" }}>v2.1</span></div>
+              <div className="model-selector">Biopsy AI <span style={{ color: "var(--biopsy-accent)" }}>v2.2</span></div>
            </header>
 
            <div className="chat-scroll-area" ref={scrollRef}>
@@ -145,7 +145,7 @@ export default function App() {
                <div className="hero-greeting">
                  <div className="hero-star">✴️</div>
                  <h1>Welcome to Biopsy AI assistant.</h1>
-                 <p style={{ color: "var(--claude-text-muted)", marginBottom: "30px" }}>Upload a biopsy sample to perform classification and lesion segmentation.</p>
+                 <p style={{ color: "var(--biopsy-text-muted)", marginBottom: "30px" }}>Upload a biopsy sample to perform classification and lesion segmentation.</p>
                  <div className="hero-suggestions">
                     <button onClick={() => fileInputRef.current?.click()}>Upload Biopsy (New)</button>
                     <button>Documentation</button>
@@ -222,13 +222,13 @@ export default function App() {
             <div className="artifact-body">
                <div className="result-hero" style={{ background: "var(--claude-bg-dark)", border: "1px solid var(--claude-border)" }}>
                   <div className="result-info">
-                     <div className="info-label" style={{ color: "var(--claude-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Classification Diagnosis</div>
-                     <div className="result-badge" style={{ fontSize: "1.2rem", fontWeight: "600", color: "var(--claude-accent)" }}>
+                     <div className="info-label" style={{ color: "var(--biopsy-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Classification Diagnosis</div>
+                     <div className="result-badge" style={{ fontSize: "1.2rem", fontWeight: "600", color: "var(--biopsy-accent)" }}>
                         {selectedArtifact.pred_class_name_ru || `Class ${selectedArtifact.pred_class}`}
                      </div>
                   </div>
                   <div className="result-metrics" style={{ textAlign: "right" }}>
-                     <div className="info-label" style={{ color: "var(--claude-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Model Confidence</div>
+                     <div className="info-label" style={{ color: "var(--biopsy-text-muted)", fontSize: "0.75rem", marginBottom: "4px" }}>Model Confidence</div>
                      <div className="result-confidence" style={{ fontWeight: "600" }}>
                         {(selectedArtifact.confidence || 0) * 100}%
                      </div>
@@ -279,8 +279,8 @@ export default function App() {
                </div>
 
                {selectedArtifact.segmentation && (
-                 <div className="metrics-card" style={{ marginTop: "20px", padding: "15px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--claude-border)" }}>
-                    <label style={{ fontSize: "0.85rem", color: "var(--claude-text-muted)", display: "block", marginBottom: "10px" }}>Segmentation Statistics</label>
+                 <div className="metrics-card" style={{ marginTop: "20px", padding: "15px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--biopsy-border)" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--biopsy-text-muted)", display: "block", marginBottom: "10px" }}>Segmentation Statistics</label>
                     <div className="metrics-list" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
                        <div className="metric-item">
                           <span>Lesion Coverage:</span>
