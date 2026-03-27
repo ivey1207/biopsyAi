@@ -43,8 +43,28 @@ export default function App() {
   const [inputValue, setInputValue] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedArtifact, setSelectedArtifact] = useState<PredictResponse | null>(null);
+  const [history, setHistory] = useState<{name: string, data: PredictResponse, timestamp: number}[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load history from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("biopsy_history");
+    if (saved) {
+      try {
+        setHistory(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to load history", e);
+      }
+    }
+  }, []);
+
+  // Save history to localStorage
+  useEffect(() => {
+    if (history.length > 0) {
+      localStorage.setItem("biopsy_history", JSON.stringify(history));
+    }
+  }, [history]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -93,6 +113,8 @@ export default function App() {
       } : m));
 
       setSelectedArtifact(data);
+      const newEntry = { name: file.name, data: data, timestamp: Date.now() };
+      setHistory(prev => [newEntry, ...prev].slice(0, 10)); // Keep last 10
 
     } catch (e) {
       setMessages(prev => prev.map(m => m.id === assistantMsgId ? {
@@ -115,9 +137,21 @@ export default function App() {
         </div>
         <div className="sidebar-content">
           <div className="history-label">Recents</div>
-          <div className="history-item active">Current Biopsy</div>
-          <div className="history-item">Recent Analysis #01</div>
-          <div className="history-item">Recent Analysis #02</div>
+          {history.length === 0 ? (
+            <div style={{ padding: "10px", color: "var(--biopsy-text-muted)", fontSize: "0.8rem", fontStyle: "italic" }}>
+              No history yet
+            </div>
+          ) : (
+            history.map((it, idx) => (
+              <div 
+                key={idx} 
+                className={`history-item ${selectedArtifact === it.data ? "active" : ""}`}
+                onClick={() => setSelectedArtifact(it.data)}
+              >
+                {it.name}
+              </div>
+            ))
+          )}
         </div>
         <div className="sidebar-footer">
            <div className="user-profile">
